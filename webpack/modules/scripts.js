@@ -3,8 +3,12 @@
  */
 export const typeScript = {
   test: /\.(ts|tsx)$/,
-  loader: 'ts-loader',
+  loader: 'esbuild-loader',
   exclude: /node_modules/,
+  options: {
+    loader: 'ts',
+    target: 'es2015',
+  },
 };
 
 /**
@@ -12,6 +16,9 @@ export const typeScript = {
  */
 export const javaScript = {
   test: /\.(js|jsx)$/,
-  loader: 'babel-loader',
+  loader: 'esbuild-loader',
   exclude: /node_modules/,
+  options: {
+    target: 'es2015', // Syntax to compile to (see options below for possible values)
+  },
 };

@@ -1,5 +1,6 @@
 // Import dependencies.
-import path from 'path';
+// import path from 'path';
+
 import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 
 // Import Configuration.
@@ -17,5 +18,5 @@ export const eSLintWebpackPlugin = new ESLintWebpackPlugin({
   failOnWarning: !config.IS_DEV,
   lintDirtyModulesOnly: config.IS_DEV,
   extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
-  overrideConfigFile: path.resolve(__dirname, '../../.eslintrc.js'),
+  // overrideConfigFile: path.resolve(__dirname, 'eslintrc.js'),
 });

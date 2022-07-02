@@ -1,12 +1,14 @@
 // Import Configuration.
+import * as hq from 'alias-hq';
+
+import { paths, config } from './configuration';
+import { css, fonts, images, javaScript, typeScript } from './modules';
 import {
   htmlWebpackPlugin,
   copyWebpackPlugin,
   eSLintWebpackPlugin,
   styleLintWebpackPlugin,
 } from './plugins';
-import { paths, config } from './configuration';
-import { css, fonts, images, javaScript, typeScript } from './modules';
 
 /**
  * Entry point for the bundle.
@@ -25,12 +27,7 @@ const output = {
 /**
  * Shared plugins.
  */
-const plugins = [
-  htmlWebpackPlugin,
-  copyWebpackPlugin,
-  eSLintWebpackPlugin,
-  styleLintWebpackPlugin,
-];
+const plugins = [htmlWebpackPlugin, copyWebpackPlugin, eSLintWebpackPlugin, styleLintWebpackPlugin];
 
 /**
  * Shared modules.
@@ -45,14 +42,16 @@ const modules = {
  */
 const resolve = {
   extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
-  alias: {
-    '@': paths.src,
-  },
+  alias: hq.get('webpack'),
 };
+
+console.log(resolve);
 
 /**
  * Webpack common configuration.
  */
+
+/** @type { import('webpack').Configuration } */
 export const WebpackCommonConfig = {
   entry,
   output,

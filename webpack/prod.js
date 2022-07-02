@@ -1,15 +1,14 @@
 // Import dependencies.
+import { ESBuildMinifyPlugin } from 'esbuild-loader';
 import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
 // Import Configuration.
+import { WebpackCommonConfig } from './common';
 import {
   cleanWebpackPlugin,
   miniCssExtractPlugin,
   imageMinimizerWebpackPlugin,
 } from './plugins';
-import { WebpackCommonConfig } from './common';
 
 /**
  * Plugins for production build.
@@ -24,8 +23,12 @@ const WebpackConfig = {
   optimization: {
     minimize: true,
     minimizer: [
-      new CssMinimizerPlugin(),
-      new TerserPlugin(),
+      new ESBuildMinifyPlugin({
+        target: 'es2015',
+        css: true, // Apply minification to CSS assets
+      }),
+      // new CssMinimizerPlugin(),
+      // new TerserPlugin(),
       imageMinimizerWebpackPlugin,
     ],
   },

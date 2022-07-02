@@ -1,2 +1,7 @@
 /* Import all base styles. */
 @import './all/all.css';
+
+.canvas {
+  width: 85%;
+  background-color: #000;
+}
