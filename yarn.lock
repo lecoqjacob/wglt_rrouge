@@ -1605,10 +1605,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@lecoqjacob/wglt@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@lecoqjacob/wglt/-/wglt-0.3.0.tgz#b09a46bd988996275549f61eff9ef4a3ceaf1b05"
-  integrity sha512-2yoNgaTb2b64rgSGqVMIe4try42NRlAQLrEz5BGMlPgFIkYF1n3PYtcvpR7hJaiu/Y5b6PkG/PUp7jiCbYBQYg==
+"@lecoqjacob/wglt@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@lecoqjacob/wglt/-/wglt-0.3.1.tgz#21b6adc181a0a50234a0ec953acc33cc9cd96cbe"
+  integrity sha512-jz4O1KdQipzZnaDgJTpVmCnwsOM/kj9oaGIuxQI0qCZAYHjV5xJFC2h2SzX9UQN2g/8mY+aDiKe6qH1TL645GA==
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
