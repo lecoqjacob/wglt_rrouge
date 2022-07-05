@@ -1,6 +1,6 @@
 import { GUI, Terminal } from '@lecoqjacob/wglt';
 
-import { Game } from './game/Game';
+import { Engine } from './game/Engine';
 import { MainMenu } from './game/menu';
 import './style.css';
 import './globals';
@@ -12,13 +12,13 @@ export interface AppState {
   update(delta: number): void;
 }
 
-export class Engine {
+export class App {
   readonly term: Terminal;
   readonly gui: GUI;
 
   state: AppState;
   mainMenu: MainMenu;
-  game?: Game;
+  game?: Engine;
 
   constructor() {
     this.term = new Terminal(this.getCanvas(), SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -42,7 +42,7 @@ export class Engine {
   }
 
   newGame(): void {
-    this.game = new Game(this);
+    this.game = new Engine(this);
     this.state = this.game;
   }
 
@@ -53,4 +53,4 @@ export class Engine {
   }
 }
 
-new Engine();
+new App();

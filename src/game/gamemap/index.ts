@@ -7,8 +7,6 @@ import {
   COLOR_DARK_GROUND,
   COLOR_DARK_WALL,
   MAX_ROOMS,
-  MAP_WIDTH,
-  MAP_HEIGHT,
   ROOM_MIN_SIZE,
   ROOM_MAX_SIZE,
 } from '@/constants';
@@ -23,10 +21,6 @@ export class GameMap extends Mixin(Console) {
 
   constructor(width: number, height: number) {
     super(width, height);
-  }
-
-  isBlocked(x: number, y: number) {
-    return this.getCell(x, y)?.charCode !== TileType.Floor;
   }
 
   xy_idx(x: number, y: number): number {
@@ -59,8 +53,8 @@ export class GameMap extends Mixin(Console) {
     }
   }
 
-  static new_map(): GameMap {
-    const map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
+  static new_map(width: number, height: number): GameMap {
+    const map = new GameMap(width, height);
     const rng = new RNG(Date.now());
 
     for (let y = 0; y < map.height; y++) {
@@ -120,8 +114,8 @@ export class GameMap extends Mixin(Console) {
   }
 
   draw(term: Terminal): void {
-    for (let y = 0; y < MAP_HEIGHT; y++) {
-      for (let x = 0; x < MAP_WIDTH; x++) {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
         const visible = this.isVisible(x, y);
         const wall = this.grid[y][x].blockedSight;
 
@@ -135,7 +129,8 @@ export class GameMap extends Mixin(Console) {
           color = wall ? COLOR_DARK_WALL : COLOR_DARK_GROUND;
         }
 
-        term.drawChar(x, y, 0, 0, color);
+        const glyph = this.grid[y][x].charCode;
+        term.drawChar(x, y, glyph, 0, color);
       }
     }
   }
@@ -151,3 +146,5 @@ export const computeFOV = (originX: number, originY: number, radius: number, map
     });
   });
 };
+
+export * from './camera';

@@ -14,7 +14,7 @@ export function createFovSystem() {
         const entity = arch[j];
 
         if (FieldOfView.isDirty[entity]) {
-          FieldOfView.isDirty[entity] = Number(false);
+          FieldOfView.isDirty[entity] = false;
 
           const [x, y] = [Position.x[entity], Position.y[entity]];
           FieldOfView.visibleTiles[entity] = computeFOV(x, y, FieldOfView.radius[entity], map);

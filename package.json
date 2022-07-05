@@ -24,6 +24,7 @@
   "dependencies": {
     "@lecoqjacob/wglt": "^0.3.1",
     "ts-mixer": "^6.0.1",
+    "ts-pattern": "^4.0.3",
     "wolf-ecs": "^2.1.3"
   }
 }

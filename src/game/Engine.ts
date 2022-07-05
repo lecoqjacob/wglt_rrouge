@@ -1,9 +1,17 @@
 import { GUI, Point, RNG, Terminal } from '@lecoqjacob/wglt';
-import { Engine, AppState } from 'main';
+import { AppState, App } from 'main';
 
-import { createFovSystem, createPlayerSystem, createRenderSystem, IMap } from '@/ecs';
+import {
+  createFovSystem,
+  createPlayerSystem,
+  createRenderSystem,
+  FieldOfView,
+  IMap,
+  Position,
+  Renderable,
+} from '@/ecs';
 
-import { GameMap } from './gamemap';
+import { GameMap, Camera } from './gamemap';
 import { Maybe, System } from './models';
 import { Spawner } from './spawner';
 
@@ -21,11 +29,12 @@ import { Spawner } from './spawner';
 // Parameters for dungeon generator
 // const TORCH_RADIUS = 10;
 
-export class Game implements AppState {
-  readonly engine: Engine;
+export class Engine implements AppState {
+  readonly app: App;
   readonly rng: RNG;
   readonly term: Terminal;
   readonly gui: GUI;
+  readonly camera: Camera;
 
   readonly player: number;
 
@@ -35,24 +44,32 @@ export class Game implements AppState {
   renderSystem: System<[]>;
   playerSystem: System<[delta: Maybe<Point>]>;
 
-  constructor(engine: Engine) {
-    this.engine = engine;
-    this.term = engine.term;
-    this.gui = engine.gui;
+  constructor(app: App) {
+    this.app = app;
+    this.term = app.term;
+    this.gui = app.gui;
 
     this.rng = new RNG(Date.now());
-    this.map = GameMap.new_map();
+    this.map = GameMap.new_map(80, 50);
     IMap.get = this.map;
+
+    this.camera = new Camera(this, this.map.width, this.map.height);
 
     // Entities
     this.player = Spawner.spawnPlayer(this.map.rooms[0].getCenter());
 
-    // Spawner.spawnAI(this.world, this.map.rooms[1].getCenter());
+    Spawner.spawnAI(this.map.rooms[1].getCenter());
 
     // create the systems
     this.playerSystem = createPlayerSystem();
     this.renderSystem = createRenderSystem(this.term);
     this.fovSystem = createFovSystem();
+
+    this.term.grid.forEach((cells) => {
+      cells.forEach((cell) => {
+        cell.setBackground(0);
+      });
+    });
   }
 
   renderAll(): void {
@@ -60,10 +77,7 @@ export class Game implements AppState {
     term.clear();
 
     // Draw Map
-    this.map.draw(term);
-    // // Draw Entities
-    this.renderSystem();
-
+    this.camera.render();
     this.gui.handleInput();
 
     // Draw GUI
@@ -74,5 +88,24 @@ export class Game implements AppState {
     this.playerSystem(this.term.getMovementKey());
     this.fovSystem();
     this.renderAll();
+  }
+
+  getPosition(entity: number): Point {
+    return new Point(Position.x[entity], Position.y[entity]);
+  }
+
+  getRenderable(entity: number) {
+    return {
+      glyph: Renderable.glyph[entity],
+      color: Renderable.color[entity],
+    };
+  }
+
+  getFOV(entity: number) {
+    return {
+      radius: FieldOfView.radius[entity],
+      isDirty: FieldOfView.isDirty[entity],
+      visibleTiles: FieldOfView.visibleTiles[entity],
+    };
   }
 }

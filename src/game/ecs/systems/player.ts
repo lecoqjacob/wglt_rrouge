@@ -24,6 +24,6 @@ export const try_move_player = (player: number, delta: Point) => {
   if (!map.isBlocked(destination.x, destination.y)) {
     Position.x[player] += delta.x;
     Position.y[player] += delta.y;
-    FieldOfView.isDirty[player] = Number(true);
+    FieldOfView.isDirty[player] = true;
   }
 };
