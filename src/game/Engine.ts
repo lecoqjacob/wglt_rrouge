@@ -1,8 +1,10 @@
-import { GUI, Point, RNG, Terminal } from '@lecoqjacob/wglt';
 import { AppState, App } from 'main';
+import { match } from 'ts-pattern';
+import { GUI, Point, RNG, Terminal } from 'wglt';
 
 import {
   createFovSystem,
+  createMapIndexSystem,
   createPlayerSystem,
   createRenderSystem,
   FieldOfView,
@@ -11,9 +13,11 @@ import {
   Renderable,
 } from '@/ecs';
 
+import { createAISystem } from './ecs/systems/ai';
 import { GameMap, Camera } from './gamemap';
 import { Maybe, System } from './models';
 import { Spawner } from './spawner';
+import { TurnState } from './turn_state';
 
 // Actual size of the window
 // const SCREEN_WIDTH = 80;
@@ -35,19 +39,23 @@ export class Engine implements AppState {
   readonly term: Terminal;
   readonly gui: GUI;
   readonly camera: Camera;
-
   readonly player: number;
+
+  state: TurnState;
 
   map: GameMap;
 
   fovSystem: System<[]>;
   renderSystem: System<[]>;
   playerSystem: System<[delta: Maybe<Point>]>;
+  indexing_system: System<[]>;
+  ai_system: System<[]>;
 
   constructor(app: App) {
     this.app = app;
     this.term = app.term;
     this.gui = app.gui;
+    this.state = TurnState.PreRun;
 
     this.rng = new RNG(Date.now());
     this.map = GameMap.new_map(80, 50);
@@ -58,18 +66,30 @@ export class Engine implements AppState {
     // Entities
     this.player = Spawner.spawnPlayer(this.map.rooms[0].getCenter());
 
-    Spawner.spawnAI(this.map.rooms[1].getCenter());
+    this.map.rooms.slice(1).forEach((room) => Spawner.spawnAI(room.getCenter()));
 
     // create the systems
-    this.playerSystem = createPlayerSystem();
+    this.playerSystem = createPlayerSystem(this);
     this.renderSystem = createRenderSystem(this.term);
     this.fovSystem = createFovSystem();
+    this.indexing_system = createMapIndexSystem();
+    this.ai_system = createAISystem();
 
     this.term.grid.forEach((cells) => {
       cells.forEach((cell) => {
         cell.setBackground(0);
       });
     });
+  }
+
+  transitionState(new_state: TurnState) {
+    this.state = new_state;
+  }
+
+  runSystems() {
+    this.indexing_system();
+    this.fovSystem();
+    this.ai_system();
   }
 
   renderAll(): void {
@@ -85,8 +105,22 @@ export class Engine implements AppState {
   }
 
   update(): void {
-    this.playerSystem(this.term.getMovementKey());
-    this.fovSystem();
+    match(this.state)
+      .with(TurnState.PreRun, () => {
+        this.runSystems();
+        this.state = TurnState.WaitingForInput;
+      })
+      .with(TurnState.WaitingForInput, () => this.playerSystem(this.term.getMovementKey()))
+      .with(TurnState.PlayerTurn, () => {
+        this.runSystems();
+        this.transitionState(TurnState.AiTurn);
+      })
+      .with(TurnState.AiTurn, () => {
+        this.runSystems();
+        this.transitionState(TurnState.WaitingForInput);
+      })
+      .run();
+
     this.renderAll();
   }
 

@@ -1,4 +1,4 @@
-import { loadImage2x, SelectDialog, Console, Colors } from '@lecoqjacob/wglt';
+import { loadImage2x, SelectDialog, Console, Colors } from 'wglt';
 import { Engine, AppState } from 'main';
 
 let menuBg: Console | null = null;

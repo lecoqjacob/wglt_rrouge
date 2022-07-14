@@ -1,4 +1,4 @@
-import { Colors, Console, Rect, RNG, Terminal } from '@lecoqjacob/wglt';
+import { Colors, Console, Rect, RNG, Terminal } from 'wglt';
 import { Mixin } from 'ts-mixer';
 
 import {

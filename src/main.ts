@@ -1,4 +1,4 @@
-import { GUI, Terminal } from '@lecoqjacob/wglt';
+import { GUI, Terminal } from 'wglt';
 
 import { Engine } from './game/Engine';
 import { MainMenu } from './game/menu';
@@ -9,7 +9,7 @@ const SCREEN_WIDTH = 80;
 const SCREEN_HEIGHT = 45;
 
 export interface AppState {
-  update(delta: number): void;
+  update(): void;
 }
 
 export class App {
@@ -27,7 +27,7 @@ export class App {
     this.mainMenu = new MainMenu(this);
     this.state = this.mainMenu;
 
-    this.term.update = (delta) => this.state.update(delta);
+    this.term.update = () => this.state.update();
   }
 
   private getCanvas(): HTMLCanvasElement {

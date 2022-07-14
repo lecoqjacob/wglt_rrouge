@@ -1,6 +1,6 @@
-import { Colors, Point } from '@lecoqjacob/wglt';
+import { Colors, Point } from 'wglt';
 
-import ECS, { AI, FieldOfView, Player, Position, Renderable } from '@/ecs';
+import ECS, { AI, FieldOfView, Player, Position, Renderable, BlocksTile } from '@/ecs';
 
 export const Spawner = {
   spawnPlayer(point: Point) {
@@ -17,6 +17,7 @@ export const Spawner = {
     const ai = ECS.createEntity();
 
     ECS.withTag(ai, AI)
+      .withTag(ai, BlocksTile)
       .withComponent(ai, Position, { x: point.x, y: point.y })
       .withComponent(ai, Renderable, { glyph: 'g'.to_cp437(), color: Colors.DARK_RED })
       .withComponent(ai, FieldOfView, { isDirty: true, radius: 6 });

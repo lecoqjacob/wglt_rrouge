@@ -1,12 +1,12 @@
-import { Cell } from '@lecoqjacob/wglt';
+import { Cell } from 'wglt';
 
 import ECS, { types } from '@/ecs';
 
-export interface IFieldOfView {
-  isDirty: boolean;
-  radius: number;
-  visibleTiles: Cell[][];
-}
+// export interface IFieldOfView {
+//   isDirty: boolean;
+//   radius: number;
+//   visibleTiles: Cell[][];
+// }
 
 export const FieldOfView = ECS.defineComponent({
   radius: types.int8,

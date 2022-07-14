@@ -1,4 +1,4 @@
-import { fromRgb } from '@lecoqjacob/wglt';
+import { fromRgb } from 'wglt';
 
 // Walls
 export const COLOR_LIGHT_WALL = fromRgb(130, 110, 50);

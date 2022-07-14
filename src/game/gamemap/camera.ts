@@ -1,4 +1,4 @@
-import { Cell, Colors, Point } from '@lecoqjacob/wglt';
+import { Cell, Colors, Point } from 'wglt';
 import { match } from 'ts-pattern';
 
 import {
